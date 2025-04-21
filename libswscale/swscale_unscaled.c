@@ -1627,6 +1627,21 @@ static int rgbToPlanarRgbaWrapper(SwsInternal *c, const uint8_t *const src[],
 #define BAYER_RENAME(x) bayer_rggb16be_to_##x
 #include "bayer_template.c"
 
+#define BAYER_GRGB
+#define BAYER_8
+#define BAYER_RENAME(x) bayer_grgb8_to_##x
+#include "bayer_template.c"
+
+#define BAYER_GRGB
+#define BAYER_16LE
+#define BAYER_RENAME(x) bayer_grgb16le_to_##x
+#include "bayer_template.c"
+
+#define BAYER_GRGB
+#define BAYER_16BE
+#define BAYER_RENAME(x) bayer_grgb16be_to_##x
+#include "bayer_template.c"
+
 static int bayer_to_rgb24_wrapper(SwsInternal *c, const uint8_t *const src[],
                                   const int srcStride[], int srcSliceY, int srcSliceH,
                                   uint8_t *const dst[], const int dstStride[])
@@ -1654,6 +1669,9 @@ static int bayer_to_rgb24_wrapper(SwsInternal *c, const uint8_t *const src[],
     CASE(AV_PIX_FMT_BAYER_GRBG8,    grbg8)
     CASE(AV_PIX_FMT_BAYER_GRBG16LE, grbg16le)
     CASE(AV_PIX_FMT_BAYER_GRBG16BE, grbg16be)
+    CASE(AV_PIX_FMT_BAYER_GRGB8,    grgb8)
+    CASE(AV_PIX_FMT_BAYER_GRGB16LE, grgb16le)
+    CASE(AV_PIX_FMT_BAYER_GRGB16BE, grgb16be)
 #undef CASE
     default: return 0;
     }
@@ -1704,6 +1722,9 @@ static int bayer_to_rgb48_wrapper(SwsInternal *c, const uint8_t *const src[],
     CASE(AV_PIX_FMT_BAYER_GRBG8,    grbg8)
     CASE(AV_PIX_FMT_BAYER_GRBG16LE, grbg16le)
     CASE(AV_PIX_FMT_BAYER_GRBG16BE, grbg16be)
+    CASE(AV_PIX_FMT_BAYER_GRGB8,    grgb8)
+    CASE(AV_PIX_FMT_BAYER_GRGB16LE, grgb16le)
+    CASE(AV_PIX_FMT_BAYER_GRGB16BE, grgb16be)
 #undef CASE
     default: return 0;
     }
@@ -1756,6 +1777,9 @@ static int bayer_to_yv12_wrapper(SwsInternal *c, const uint8_t *const src[],
     CASE(AV_PIX_FMT_BAYER_GRBG8,    grbg8)
     CASE(AV_PIX_FMT_BAYER_GRBG16LE, grbg16le)
     CASE(AV_PIX_FMT_BAYER_GRBG16BE, grbg16be)
+    CASE(AV_PIX_FMT_BAYER_GRGB8,    grgb8)
+    CASE(AV_PIX_FMT_BAYER_GRGB16LE, grgb16le)
+    CASE(AV_PIX_FMT_BAYER_GRGB16BE, grgb16be)
 #undef CASE
     default: return 0;
     }

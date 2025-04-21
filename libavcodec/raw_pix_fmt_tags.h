@@ -235,7 +235,11 @@ static const PixelFormatTag raw_pix_fmt_tags[] = {
     { AV_PIX_FMT_BAYER_GRBG8,     MKTAG(0xBA, 'G', 'R', 8   ) },
     { AV_PIX_FMT_BAYER_GRBG16LE,  MKTAG(0xBA, 'G', 'R', 16  ) },
     { AV_PIX_FMT_BAYER_GRBG16BE,  MKTAG(16,   'R', 'G', 0xBA) },
-
+    /* Phantom cine files - GR/GB Sensor */
+    { AV_PIX_FMT_BAYER_GRGB8,     MKTAG(0xBA, 'G', 'R', 8   ) },
+    { AV_PIX_FMT_BAYER_GRGB16LE,  MKTAG(0xBA, 'G', 'R', 16  ) },
+    { AV_PIX_FMT_BAYER_GRGB16BE,  MKTAG(16,   'R', 'G', 0xBA) },
+    
     /* quicktime */
     { AV_PIX_FMT_YUV420P,         MKTAG('R', '4', '2', '0') }, /* Radius DV YUV PAL */
     { AV_PIX_FMT_YUV411P,         MKTAG('R', '4', '1', '1') }, /* Radius DV YUV NTSC */

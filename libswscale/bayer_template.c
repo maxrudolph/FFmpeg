@@ -29,6 +29,11 @@
 #define BAYER_G       1
 #define BAYER_B       0
 #endif
+#if defined(BAYER_GRGB)
+#define BAYER_R       0
+#define BAYER_G       1
+#define BAYER_B       2
+#endif
 
 #if defined(BAYER_8)
 #define BAYER_READ(x) (x)
@@ -52,7 +57,40 @@
 #define G(y, x) dst[(y)*dst_stride + (x)*3 + BAYER_G]
 #define B(y, x) dst[(y)*dst_stride + (x)*3 + BAYER_B]
 
-#if defined(BAYER_BGGR) || defined(BAYER_RGGB)
+#if defined(BAYER_GRGB)
+/* new code for GRGB */
+#define BAYER_TO_RGB24_COPY \
+    R(0, 0) = \
+    R(0, 1) = \
+    R(1, 1) = \
+    R(1, 0) = S(0, 1) >> BAYER_SHIFT; \
+    \
+    G(0, 0) = S(0, 0) >> BAYER_SHIFT; \
+    G(0, 1) = \
+    G(1, 1) = (T(0, 1) + T(1, 1)) >> (1 + BAYER_SHIFT); \
+    G(1, 0) = S(1, 0) >> BAYER_SHIFT; \
+    \
+    B(1, 1) = \
+    B(0, 0) = \
+    B(0, 1) = \
+    B(1, 0) = S(1, 1) >> BAYER_SHIFT;
+#define BAYER_TO_RGB24_INTERPOLATE \
+    R(0, 0) = (T(0,-1)+T(0,1)) >> (1+BAYER_SHIFT); \
+    G(0, 0) = S(0,0) >> BAYER_SHIFT; \
+    B(0, 0) = (T(-1,-1) + T(1,1) + T(1,-1) + T(-1,1)) >> (2+BAYER_SHIFT);\
+    \
+    R(0, 1) = S(0,1) >> BAYER_SHIFT;\
+    G(0, 1) = (T(0,0)+T(0,2)) >> (1+BAYER_SHIFT);\
+    B(0, 1) = (T(1,1)+T(-1,1)) >> (1+BAYER_SHIFT);\
+    \
+    R(1, 0) = (T(0,-1)+T(0,1)+T(2,-1)+T(2,1)) >> (2+BAYER_SHIFT);\
+    G(1, 0) = S(1,0) >> BAYER_SHIFT;\
+    B(1, 0) = (T(1,-1)+T(1,1)) >> (1+BAYER_SHIFT);\
+    \
+    R(1, 1) = (T(0,1)+T(2,1)) >> (1+BAYER_SHIFT);\
+    G(1, 1) = (T(1,0)+T(1,2)) >> (1+BAYER_SHIFT);\
+    B(1, 1) = S(1,1) >> BAYER_SHIFT;
+#elif defined(BAYER_BGGR) || defined(BAYER_RGGB)
 #define BAYER_TO_RGB24_COPY \
     R(0, 0) = \
     R(0, 1) = \
@@ -118,7 +156,39 @@
     B(1, 1) = (T(0, 1) + T(2, 1)) >> (1 + BAYER_SHIFT);
 #endif
 
-#if defined(BAYER_BGGR) || defined(BAYER_RGGB)
+#if defined(BAYER_GRGB)
+#define BAYER_TO_RGB48_COPY \
+    R(0, 0) = \
+    R(0, 1) = \
+    R(1, 1) = \
+    R(1, 0) = S(0, 1); \
+    \
+    G(0, 0) = S(0, 0); \
+    G(0, 1) = \
+    G(1, 1) = (T(0, 1) + T(1, 1)) >> 1; \
+    G(1, 0) = S(1, 0); \
+    \
+    B(1, 1) = \
+    B(0, 0) = \
+    B(0, 1) = \
+    B(1, 0) = S(1, 1);
+#define BAYER_TO_RGB48_INTERPOLATE \
+    R(0, 0) = (T(0,-1)+T(0,1)) >> 1; \
+    G(0, 0) = S(0,0); \
+    B(0, 0) = (T(-1,-1) + T(1,1) + T(1,-1) + T(-1,1)) >> 2;\
+    \
+    R(0, 1) = S(0,1);\
+    G(0, 1) = (T(0,0)+T(0,2)) >> 1;\
+    B(0, 1) = (T(1,1)+T(-1,1)) >> 1;\
+    \
+    R(1, 0) = (T(0,-1)+T(0,1)+T(2,-1)+T(2,1)) >> 2;\
+    G(1, 0) = S(1,0);\
+    B(1, 0) = (T(1,-1)+T(1,1)) >> 1;\
+    \
+    R(1, 1) = (T(0,1)+T(2,1)) >> 1;\
+    G(1, 1) = (T(1,0)+T(1,2)) >> 1;\
+    B(1, 1) = S(1,1);
+#elif defined(BAYER_BGGR) || defined(BAYER_RGGB)
 #define BAYER_TO_RGB48_COPY \
     R(0, 0) = \
     R(0, 1) = \
@@ -326,6 +396,9 @@ static void BAYER_RENAME(yv12_interpolate)(const uint8_t *src, int src_stride, u
 #endif
 #if defined(BAYER_GRBG)
 #undef BAYER_GRBG
+#endif
+#if defined(BAYER_GRGB)
+#undef BAYER_GRGB
 #endif
 #if defined(BAYER_8)
 #undef BAYER_8

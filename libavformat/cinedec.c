@@ -52,6 +52,7 @@ enum {
     CFA_VRIV6     = 2,  /**< BGGR/GRBG */
     CFA_BAYER     = 3,  /**< GB/RG */
     CFA_BAYERFLIP = 4,  /**< RG/GB */
+    CFA_BAYERFLIPB = 5, /**< GR/GB */
 };
 
 #define CFA_TLGRAY  0x80000000U
@@ -237,6 +238,16 @@ static int cine_read_header(AVFormatContext *avctx)
                 return AVERROR_INVALIDDATA;
             }
             break;
+         case CFA_BAYERFLIPB:
+            if (biBitCount == 8) {
+                st->codecpar->format = AV_PIX_FMT_BAYER_GRGB8;
+            } else if (biBitCount == 16) {
+                st->codecpar->format = AV_PIX_FMT_BAYER_GRGB16LE;
+            } else {
+                avpriv_request_sample(avctx, "unsupported biBitCount %i", biBitCount);
+                return AVERROR_INVALIDDATA;
+            }
+            break;	    
         default:
            avpriv_request_sample(avctx, "unsupported Color Field Array (CFA) %i", CFA & 0xFFFFFF);
             return AVERROR_INVALIDDATA;

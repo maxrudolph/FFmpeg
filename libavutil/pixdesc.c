@@ -2130,6 +2130,21 @@ static const AVPixFmtDescriptor av_pix_fmt_descriptors[AV_PIX_FMT_NB] = {
         BAYER16_DESC_COMMON
         .flags = AV_PIX_FMT_FLAG_BE | AV_PIX_FMT_FLAG_RGB | AV_PIX_FMT_FLAG_BAYER,
     },
+    [AV_PIX_FMT_BAYER_GRGB8] = {
+        .name = "bayer_grgb8",
+        BAYER8_DESC_COMMON
+        .flags = AV_PIX_FMT_FLAG_RGB | AV_PIX_FMT_FLAG_BAYER,
+    },
+    [AV_PIX_FMT_BAYER_GRGB16LE] = {
+        .name = "bayer_grgb16le",
+        BAYER16_DESC_COMMON
+        .flags = AV_PIX_FMT_FLAG_RGB | AV_PIX_FMT_FLAG_BAYER,
+    },
+    [AV_PIX_FMT_BAYER_GRGB16BE] = {
+        .name = "bayer_grgb16be",
+        BAYER16_DESC_COMMON
+        .flags = AV_PIX_FMT_FLAG_BE | AV_PIX_FMT_FLAG_RGB | AV_PIX_FMT_FLAG_BAYER,
+    },
     [AV_PIX_FMT_NV16] = {
         .name = "nv16",
         .nb_components = 3,
